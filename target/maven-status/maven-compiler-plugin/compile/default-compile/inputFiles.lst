@@ -1,1 +1,7 @@
-/home/osboxes/OpenCV-android-sdk/sdk/OpenCVDemo/src/main/java/com/mycompany/app/App.java
+/home/osboxes/OpenCV-android-sdk/sdk/OpenCVDemo/src/main/java/com/mycompany/app/utils/OperatingSystemUtils.java
+/home/osboxes/OpenCV-android-sdk/sdk/OpenCVDemo/src/main/java/com/mycompany/app/opencvapi/OpenCvApi.java
+/home/osboxes/OpenCV-android-sdk/sdk/OpenCVDemo/src/main/java/com/mycompany/app/utils/ParseUtils.java
+/home/osboxes/OpenCV-android-sdk/sdk/OpenCVDemo/src/main/java/com/mycompany/app/opencvapi/OpenCvApiImp.java
+/home/osboxes/OpenCV-android-sdk/sdk/OpenCVDemo/src/main/java/com/mycompany/app/Main.java
+/home/osboxes/OpenCV-android-sdk/sdk/OpenCVDemo/src/main/java/com/mycompany/app/constant/Constant.java
+/home/osboxes/OpenCV-android-sdk/sdk/OpenCVDemo/src/main/java/com/mycompany/app/config/Config.java
