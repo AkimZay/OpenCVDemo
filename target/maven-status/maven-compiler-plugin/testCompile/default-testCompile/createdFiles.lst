@@ -1,0 +1,5 @@
+com/mycompany/app/utils/ParseUtilsTest.class
+MainTest.class
+com/mycompany/app/config/ConfigTest.class
+com/mycompany/app/opencvapi/OpenCvApiImpTest.class
+com/mycompany/app/utils/OperatingSystemUtilsTest.class
