@@ -18,6 +18,11 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 
 import org.apache.log4j.Logger;
+import org.opencv.imgproc.Imgproc;
+
+import static com.mycompany.app.constant.Constant.PATH_TO_IMAGES;
+import static com.mycompany.app.constant.Constant.SRC_IMG_NAME;
+import static org.opencv.imgcodecs.Imgcodecs.imread;
 
 /**
  * The type Main.
@@ -26,6 +31,7 @@ public class Main {
     //private static Logger logger = Logger.getLogger(Main.class);
     private final static int[] kernelArray = {3, 5, 7, 9, 13, 15};
     private final static OpenCvApi openCvApi = new OpenCvApiImp();
+    private final static String dirPath = "images/";
     //private final static String dirPath = Config.getProp(Constant.PATH_TO_IMAGES);
 
     /**
@@ -70,13 +76,15 @@ public class Main {
         mc5.setTo(new Scalar(5));
         System.out.println("OpenCV Mat data:\n" + m.dump());
 
-        Mat var = loadImage("images/Asking.jpg");
+        Mat var = getMatImage();
 
-        showImage(var);
+        //showImage(var);
+
+        taskTwo();
     }
 
     public static Mat loadImage(String path) {
-        return Imgcodecs.imread(path);
+        return imread(path);
     }
 
     public static void showImage(Mat m) {
@@ -102,7 +110,7 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         System.out.println("Created frame with image");
 
-        Imgcodecs.imwrite("resources/img/Asking.jpg",m);
+        Imgcodecs.imwrite("resources/img/image.jpg",m);
     }
 
 
@@ -122,7 +130,7 @@ public class Main {
 //
 ////        System.out.println("Welcome to OpenCV " + Core.VERSION);
 ////
-////        String imgFile = "images/Asking.jpg";
+////        String imgFile = "images/image.jpg";
 ////        Mat src = Imgcodecs.imread(imgFile);
 ////
 ////        String xmlFile = "xml/lbpcascade_frontalface.xml";
@@ -169,4 +177,66 @@ public class Main {
 //            throw new RuntimeException("Failed to load opencv native library", e);
 //        }
 //    }
+
+    private static void taskTwo() {
+        Mat matImage = getMatImage();
+        Mat modifiedImage;
+        for (int numChn = 0; numChn < 3; numChn++) {
+            modifiedImage = openCvApi.setChannelToZero(matImage, numChn);
+            openCvApi.showImage(modifiedImage);
+            Imgcodecs.imwrite(dirPath + "Channel_" + numChn + "_" + SRC_IMG_NAME, modifiedImage);
+        }
+
+    }
+
+    private static void taskThree() {
+        Mat matImage = getMatImage();
+
+        for (int kernelSize : kernelArray) {
+            //3.1
+            openCvApi.smoothingFilters(matImage, kernelSize);
+            //3.2
+            openCvApi.morfologyTest(matImage, kernelSize, Imgproc.MORPH_RECT, Constant.MORPH_RECT_PREFIX);
+            openCvApi.morfologyTest(matImage, kernelSize, Imgproc.MORPH_ELLIPSE, Constant.MORPH_ELLIPSE_PREFIX);
+            openCvApi.morfologyTest(matImage, kernelSize, Imgproc.MORPH_GRADIENT, Constant.MORPH_GRADIENT_PREFIX);
+            openCvApi.morfologyTest(matImage, kernelSize, Imgproc.MORPH_BLACKHAT, Constant.MORPH_BLACKHAT_PREFIX);
+        }
+    }
+
+    private static void taskFour() {
+        Mat matImage = getMatImage();
+        Mat imageCopy = matImage.clone();
+
+        //4.1
+        openCvApi.testFillFlood(imageCopy, 0, 0, 100, 255, 0, 0);
+
+        //4.2
+        Mat raisedImage = openCvApi.raisePyramid(matImage, 200);
+        openCvApi.showImage(raisedImage);
+        Imgcodecs.imwrite(dirPath + "RaisePyramidUp_" + SRC_IMG_NAME, matImage);
+
+        Mat reducedImage = openCvApi.reducePyramid(matImage, 200);
+        openCvApi.showImage(reducedImage);
+        Imgcodecs.imwrite(dirPath + "PyramidDown_" + SRC_IMG_NAME, matImage);
+
+        Core.subtract(matImage, imageCopy, imageCopy);
+        openCvApi.showImage(imageCopy);
+        Imgcodecs.imwrite(dirPath + "Subtract_" + SRC_IMG_NAME, matImage);
+
+        //4.3
+        openCvApi.showImage(matImage);
+        int width = 209;
+        int height = 66;
+    }
+
+    private static Mat getMatImage() {
+        String dirPath = "images/";
+        Mat matImage = imread(dirPath + SRC_IMG_NAME);
+        if (matImage.empty()) {
+            System.out.println("Error: Image " + SRC_IMG_NAME + " not found in path " + dirPath);
+            throw new RuntimeException("Error: Image " + SRC_IMG_NAME + " not found in path " + dirPath);
+        }
+        return matImage;
+    }
+
 }
